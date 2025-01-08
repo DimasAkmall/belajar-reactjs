@@ -1,6 +1,5 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
-import HelloWorld from "./src/hello-world/HelloWorld"
 
 // https://vite.dev/config/
 export default defineConfig({
