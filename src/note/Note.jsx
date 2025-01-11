@@ -1,12 +1,24 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { NotesDispatchContext } from "./NoteContext"
 
-export default function Note({ note, onChange, onDelete }) {
+// export default function Note({ note, onChange, onDelete }) { // Without Context Reducer
+export default function Note({ note }) {
     const [isEditing, setEditing] = useState(false)
+    const dispatch = useContext(NotesDispatchContext) // Using Context Reducer
+
     let component
 
     function handleChangeText(e) {
-        const newNote = { ...note, text: e.target.value }
-        onChange(newNote)
+        // Without Context Reducer
+        // const newNote = { ...note, text: e.target.value }
+        // onChange(newNote)
+
+        // Using Context Reducer
+        dispatch({
+            ...note,
+            type: "CHANGE_NOTE",
+            text: e.target.value,
+        })
     }
 
     if (isEditing) {
@@ -26,15 +38,33 @@ export default function Note({ note, onChange, onDelete }) {
     }
 
     function handleChangeDone(e) {
-        const newNote = { ...note, done: e.target.checked }
-        onChange(newNote)
+        // Without Context Reducer
+        // const newNote = { ...note, done: e.target.checked }
+        // onChange(newNote)
+
+        // Using Context Reducer
+        dispatch({
+            ...note,
+            type: "CHANGE_NOTE",
+            done: e.target.checked,
+        })
+    }
+
+    function handleDelete() {
+        dispatch({
+            type: "DELETE_NOTE",
+            id: note.id,
+        })
     }
 
     return (
         <label>
             <input type="checkbox" checked={note.done} onChange={handleChangeDone} />
             {component}
-            <button onClick={() => onDelete(note)}>Delete</button>
+            {/* // Without Context Reducer */}
+            {/* <button onClick={() => onDelete(note)}>Delete</button> */}
+            {/* // Using Context Reducer */}
+            <button onClick={handleDelete}>Delete</button>
         </label>
     )
 }
