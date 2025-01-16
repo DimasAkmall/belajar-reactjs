@@ -15,24 +15,37 @@ export default function ProductList() {
         console.log("Tes Empty Array in Depedencies Parameter on useEffect()")
     }, [])
 
-    useEffect(() => {
-        // console.log("Call Use Effect")
-        // Use useRef()
-        // if (loaded.current === false) {
+    // useEffect(() => {
+    //     // console.log("Call Use Effect")
+    //     // Use useRef()
+    //     // if (loaded.current === false) {
 
-        // Without useRef but use dependencies parameter from useEffect
-        if (load) {
-            fetch("/products.json")
-                .then((response) => response.json())
-                .then((data) => setProducts(data))
-            // .then(() => (loaded.current = true))  // Use useRef()
+    //     // Without useRef but use dependencies parameter from useEffect
+    //     if (load) {
+    //         fetch("/products.json")
+    //             .then((response) => response.json())
+    //             .then((data) => setProducts(data))
+    //         // .then(() => (loaded.current = true))  // Use useRef()
+    //     }
+
+    //     // Closure untuk melihat clean up effect. clean up terjadi 2 kali karna dilakukan dalam mode strict mode sehingga dirender 2 kali dan dipanggil effect 2 kali. apabila terdapat efek lanjutan dari effek saat ini tentu akan dilakukan clean up otomatis terlebih dahulu
+    //     // return () => {
+    //     //     console.log("Product List Component Unmounted")
+    //     // }
+    //     // })  // Use useRef()
+    // }, [load])
+
+    // Use Async - react default is not support to do async await, .fetch is e promise not a async
+    useEffect(() => {
+        async function fetchProducts() {
+            const response = await fetch("/products.json")
+            const data = await response.json()
+            setProducts(data)
         }
 
-        // Closure untuk melihat clean up effect. clean up terjadi 2 kali karna dilakukan dalam mode strict mode sehingga dirender 2 kali dan dipanggil effect 2 kali. apabila terdapat efek lanjutan dari effek saat ini tentu akan dilakukan clean up otomatis terlebih dahulu
-        // return () => {
-        //     console.log("Product List Component Unmounted")
-        // }
-        // })  // Use useRef()
+        if (load) {
+            fetchProducts()
+        }
     }, [load])
 
     return (
